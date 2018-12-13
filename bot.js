@@ -1,65 +1,97 @@
-﻿const Discord = require('discord.js');
-const client = new Discord.Client();
-let timer;
-console.log("BOT ONLINE");
+const Discord = require('discord.js');
+const client = new Discord.Client()
+const prefix = '!';
+const token = 'NTE3NzU4NDU4MTA4NDQ0Njg5.DuG_4w.lUYcewcYMHGteCWXR7dpgKDjCio';
+client.login(token)
 
-var prefix = "!";
 
-client.on("message", message => {
 
-            if (message.content.startsWith(prefix + "bc")) {
-                         if (!message.member.hasPermission("ADMINISTRATOR"))  return;
-  let args = message.content.split(" ").slice(1);
-  var argresult = args.join(' '); 
-  message.guild.members.filter(m => m.presence.status !== 'offline').forEach(m => {
- m.send(`${argresult}\n ${m}`);
-})
- message.channel.send(`\`${message.guild.members.filter(m => m.presence.status !== 'online').size}\` : عدد الاعضاء المستلمين`); 
- message.delete(); 
-};     
+
+client.on('ready', () => {
+    console.log(`logged ass ${client.user.tag}, \' Guilds: ${client.guilds.size}...`);
+    client.user.setActivity('Wine', {type: 'WATCHING'});
 });
 
 
-const adminprefix = "BC+";
-const developers = ['476130473681092608'];
 
-console.log("Paaaaartly");
 
-client.on('ready', () => {
-    console.log(`Logged as ${client.user.tag}`)
-})
 
 
 client.on('message', message => {
-    var argresult = message.content.split(` `).slice(1).join(' ');
-      if (!developers.includes(message.author.id)) return;
-      
-  if (message.content.startsWith(adminprefix + 'ply')) {
-    client.user.setGame(argresult);
-      message.channel.send(`**تم تغيير البلاينق الى   ${argresult}**`)
-  } else 
+    if(!message.channel.guild) return;
+ if(message.content.startsWith(prefix + 'bc')) {
+ if(!message.channel.guild) return message.channel.send('**هذا الأمر فقط للسيرفرات**').then(m => m.delete(5000));
+ if(!message.member.hasPermission('ADMINISTRATOR')) return      message.channel.send('**للأسف لا تمتلك صلاحية** `ADMINISTRATOR`' );
+ let args = message.content.split(" ").join(" ").slice(2 + prefix.length);
+ let BcList = new Discord.RichEmbed()
+ .setThumbnail(message.author.avatarURL)
+ .setAuthor(`محتوى الرساله ${args}`)
+.setDescription(`هل أنت متأكد من أرسالك للبرودكاست؟`)
+ if (!args) return message.reply('**يجب عليك كتابة كلمة او جملة لإرسال البرودكاست**');message.channel.send(BcList).then(msg => {
+ msg.react('✏')
+ .then(() => msg.react('✏'))
+  
+ let NormalBcFilter = (reaction, user) => reaction.emoji.name === '✏' && user.id === message.author.id;
+  
+ let NormalBc = msg.createReactionCollector(NormalBcFilter, { time: 60000 });
+ 
+ 
+ NormalBc.on("collect", r => {
+   message.channel.send(`:ballot_box_with_check: **تم أرسال البرودكاست بنجاح**`);
+let i = "0";
+ message.guild.members.forEach(m => {
+ let NormalRep = args.replace('[server]' ,message.guild.name).replace('[user]', m).replace('[by]', `${message.author}`)
+ m.send(NormalRep).then(ms => {
+       i = i + 1;
+ }).catch(err => {
+      i = i - 1;
+ })
+ })
+ let nj7 = i;
+ let fshl = msg.guild.members.size -  i;
+      var results = `**Results | النتائج
+  
+  نجاح` + ' `' + `${nj7}` + '`' + `
+  فشل` + ' `' + `${fshl}` + '`**';
+  message.channel.send(results);
+ })
+ })
+ }
+ });
 
-  if (message.content.startsWith(adminprefix + 'wt')) {
-  client.user.setActivity(argresult, {type:'WATCHING'});
-      message.channel.send(`**تَم تغيير الواتشينق الى   ${argresult}**`)
-  } else 
-  if (message.content.startsWith(adminprefix + 'ls')) {
-  client.user.setActivity(argresult , {type:'LISTENING'});
-      message.channel.send(`**تَم تغيير الليسينينق الى   ${argresult}**`)
-  } else
-  if (message.content.startsWith(adminprefix + 'st')) {
-    client.user.setGame(argresult, "https://www.twitch.tv/paaaaaartly");
-      message.channel.send(`تم تغييرك حالتك بالتويتش الى   **${argresult}**`)
-  }
-  if (message.content.startsWith(adminprefix + 'sn')) {
-  client.user.setUsername(argresult).then
-      message.channel.send(`جاري تغيير الأسم لـ ..**${argresult}** `)
-} else
-if (message.content.startsWith(adminprefix + 'sa')) {
-  client.user.setAvatar(argresult);
-    message.channel.send(`**جاري تغيير الأفتار... :** `);
-}
-});
 
 
-client.login('NTE3NzU4NDU4MTA4NDQ0Njg5.DuG_4w.lUYcewcYMHGteCWXR7dpgKDjCio');
+client.on('message', message => {
+
+    const devs = ['476130473681092608'];
+
+    let argresult = message.content.split(` `).slice(1).join(' ');
+    if (message.content.startsWith(prefix + 'st')) {
+      if (!devs.includes(message.author.id)) return;
+      message.delete();
+      client.user.setGame(argresult, 'https://twitch.tv/BetterStore');
+
+    } else if(message.content.startsWith(prefix + 'wt')) {
+        client.user.setActivity(argresult,{type: 'WATCHING'});
+
+      } else if(message.content.startsWith(prefix + 'ls')) {
+        client.user.setActivity(argresult,{type: 'LISTENING'});
+
+      } else if(message.content.startsWith(prefix + 'pl')) {
+        client.user.setActivity(argresult,{type: 'PLAYING'});
+
+      } else if(message.content.startsWith(prefix + 'sn')) {
+        client.user.setUsername(argresult);
+
+      } else if(message.content.startsWith(prefix + 'sa')) {
+        client.user.setAvatar(argresult);
+
+
+      } else if(message.content.startsWith(prefix + 'sst')) {
+        if(!argresult) return message.channel.send('`online`, `DND(Do not Distrub),` `idle`, `invisible(Offline)` :notes: أختر أحد الحالات');
+        client.user.setStatus(argresult);
+
+
+    }
+
+  });
