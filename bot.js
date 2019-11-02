@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client()
-const prefix = '!';
-const token = 'NTE3NzU4NDU4MTA4NDQ0Njg5.DuG_4w.lUYcewcYMHGteCWXR7dpgKDjCio';
+const prefix = 'DE';
+const token = 'NjM4ODE0MTk4NDkwNTk1MzM4.XbiMKA.lkKy7d4KKGZN5UA7yyKwgJkHHx8';
 client.login(token)
 
 
@@ -9,7 +9,7 @@ client.login(token)
 
 client.on('ready', () => {
     console.log(`logged ass ${client.user.tag}, \' Guilds: ${client.guilds.size}...`);
-    client.user.setActivity('Wine', {type: 'WATCHING'});
+    client.user.setActivity('Dynasty ', {type: 'WATCHING'});
 });
 
 
@@ -61,37 +61,3 @@ let i = "0";
 
 
 
-client.on('message', message => {
-
-    const devs = ['476130473681092608'];
-
-    let argresult = message.content.split(` `).slice(1).join(' ');
-    if (message.content.startsWith(prefix + 'st')) {
-      if (!devs.includes(message.author.id)) return;
-      message.delete();
-      client.user.setGame(argresult, 'https://twitch.tv/BetterStore');
-
-    } else if(message.content.startsWith(prefix + 'wt')) {
-        client.user.setActivity(argresult,{type: 'WATCHING'});
-
-      } else if(message.content.startsWith(prefix + 'ls')) {
-        client.user.setActivity(argresult,{type: 'LISTENING'});
-
-      } else if(message.content.startsWith(prefix + 'pl')) {
-        client.user.setActivity(argresult,{type: 'PLAYING'});
-
-      } else if(message.content.startsWith(prefix + 'sn')) {
-        client.user.setUsername(argresult);
-
-      } else if(message.content.startsWith(prefix + 'sa')) {
-        client.user.setAvatar(argresult);
-
-
-      } else if(message.content.startsWith(prefix + 'sst')) {
-        if(!argresult) return message.channel.send('`online`, `DND(Do not Distrub),` `idle`, `invisible(Offline)` :notes: أختر أحد الحالات');
-        client.user.setStatus(argresult);
-
-
-    }
-
-  });
